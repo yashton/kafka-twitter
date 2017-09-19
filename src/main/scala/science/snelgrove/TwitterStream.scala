@@ -50,7 +50,7 @@ class TwitterStream (topic: String, consumer: OAuth.Consumer, token: OAuth.Token
       .via(Framing.delimiter(ByteString("\r\n"), Int.MaxValue))
       .filter(_.nonEmpty)
       .map { _.utf8String }
-      .take(10)
+//      .take(10)
       .map { line =>
         try {
           val tweet = Json.parse(line).as[Tweet]

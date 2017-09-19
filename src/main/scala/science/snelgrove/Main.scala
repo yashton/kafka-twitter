@@ -9,8 +9,8 @@ object Main extends App {
     config.getString("twitter.access.secret"))
   val consumer = OAuth.Consumer(config.getString("twitter.consumer.key"),
     config.getString("twitter.consumer.secret"))
-  // val twitter = new TwitterStream("twitter", consumer, token)
-  // twitter.start("pokemon")
-  val kafka = new KafkaConsumer("twitter", "tweetsByUser")
+  val twitter = new TwitterStream("twitter", consumer, token)
+  twitter.start("pokemon")
+  val kafka = new KafkaConsumer("twitter", "tweetsByUser", "userAverageWords")
   kafka.start()
 }
