@@ -1,7 +1,6 @@
 package science.snelgrove
 
 import java.nio.charset.StandardCharsets
-import java.util.Properties
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StreamsConfig;
@@ -45,7 +44,7 @@ private class IntSerde extends BaseSerde[Int] {
 
 }
 
-class KafkaConsumer(topic: String, topicOut: String, topicOutAvg: String) {
+class KafkaConsumer(topic: String, topicOut: String, topicOutAvg: String, avgStoreName: String) {
   import Serialization._
   implicit private val tweetSerde = new JsonSerde[Tweet]()
   implicit private val intSerde = new IntSerde()
@@ -70,18 +69,9 @@ class KafkaConsumer(topic: String, topicOut: String, topicOutAvg: String) {
     tweets
       .mapValues[Int](t => t.text split "\\W+" size)
       .groupByKey(implicitly[Serde[String]], implicitly[Serde[Int]])
-      .agg[(Int, Double)](init, avg, "tweet-averages")
+      .agg[(Int, Double)](init, avg, avgStoreName)
       .sendTo(topicOutAvg)
 
     builder
-  }
-
-  def start(): Unit = {
-    val props = new Properties()
-    props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-test")
-    props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-
-    val kafka = new KafkaStreams(setup, props)
-    kafka.start()
   }
 }
