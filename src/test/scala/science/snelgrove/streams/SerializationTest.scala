@@ -1,4 +1,4 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 
 import akka.http.scaladsl.model._
 import com.typesafe.config._
@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets
 import org.scalatest._
 import Matchers._
 import play.api.libs.json._
-
+import science.snelgrove.twitter.streams.Tweet
 class SerializationTest extends FlatSpec {
   import Serialization._
 

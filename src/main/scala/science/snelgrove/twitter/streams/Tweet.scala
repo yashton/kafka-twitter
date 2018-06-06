@@ -1,4 +1,4 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 import java.time.Instant
 
 case class Coordinates(longitude: Double, latitude: Double)
@@ -10,12 +10,11 @@ case class User(
   location: Option[String],
   name: String,
   screenName: String,
-  statusesCount: Int
-)
+  statusesCount: Int)
 
 sealed trait TwitterMsg
 
-case class Tweet (
+case class Tweet(
   id: Long,
   text: String,
   createdAt: String,
@@ -24,9 +23,7 @@ case class Tweet (
   retweetCount: Int,
   retweeted: Boolean,
   retweetedStatus: Option[Tweet],
-  user: User
-) extends TwitterMsg
-
+  user: User) extends TwitterMsg
 
 case class Blank() extends TwitterMsg
 case class Delete() extends TwitterMsg

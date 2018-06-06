@@ -1,6 +1,6 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 
-import akka.http.scaladsl.model.headers.{Authorization, GenericHttpCredentials, RawHeader}
+import akka.http.scaladsl.model.headers.{ Authorization, GenericHttpCredentials, RawHeader }
 import akka.http.scaladsl.model._
 import akka.stream.Materializer
 import scala.collection.JavaConverters._
@@ -27,8 +27,7 @@ class OAuth(consumer: OAuth.Consumer, token: OAuth.Token) {
   val signer: Signer = Signer.getStandardSigner()
   val secureRandom: SecureRandom = new SecureRandom()
 
-  def oauthHeader(uri: Uri, method: HttpMethod, form: FormData)
-      : HttpHeader = {
+  def oauthHeader(uri: Uri, method: HttpMethod, form: FormData): HttpHeader = {
     val timestampSecs = generateTimestamp()
     val nonce = generateNonce()
     oauthCreateHeader(oauthRawHeader(uri, method, form, nonce, timestampSecs))
@@ -39,15 +38,12 @@ class OAuth(consumer: OAuth.Consumer, token: OAuth.Token) {
     RawHeader("Authorization", "OAuth " + combined)
   }
 
-  def oauthRawHeader(uri: Uri, method: HttpMethod, form: FormData, nonce: String, timestampSecs: Long)
-      : Map[String, String] = {
-    val javaParams = for ((k, v) <- form.fields) yield
-      new Pair(UrlCodec.encode(k), UrlCodec.encode(v))
+  def oauthRawHeader(uri: Uri, method: HttpMethod, form: FormData, nonce: String, timestampSecs: Long): Map[String, String] = {
+    val javaParams = for ((k, v) <- form.fields) yield new Pair(UrlCodec.encode(k), UrlCodec.encode(v))
 
     val oAuth1Params: OAuthParams.OAuth1Params = new OAuthParams.OAuth1Params(
       token.key, consumer.key, nonce, timestampSecs, timestampSecs.toString, "",
-      OAuthParams.HMAC_SHA1, OAuthParams.ONE_DOT_OH
-    );
+      OAuthParams.HMAC_SHA1, OAuthParams.ONE_DOT_OH);
 
     val normalized: String = normalizer.normalize(
       uri.scheme,
@@ -56,8 +52,7 @@ class OAuth(consumer: OAuth.Consumer, token: OAuth.Token) {
       method.name,
       uri.path.toString,
       javaParams.asJava,
-      oAuth1Params
-    )
+      oAuth1Params)
 
     val signature = signer.getString(normalized, token.secret, consumer.secret)
 
@@ -73,7 +68,7 @@ class OAuth(consumer: OAuth.Consumer, token: OAuth.Token) {
 
   private def quoted(str: String): String = "\"" + str + "\""
 
-  private def generateTimestamp(): Long = System.currentTimeMillis()/1000
+  private def generateTimestamp(): Long = System.currentTimeMillis() / 1000
 
   private def generateNonce(): String =
     Math.abs(secureRandom.nextLong()).toString + System.currentTimeMillis()

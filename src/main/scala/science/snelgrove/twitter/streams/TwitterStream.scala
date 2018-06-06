@@ -1,22 +1,22 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 
 import akka.actor.ActorSystem
 import akka.Done
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse, Uri, FormData, HttpMethods}
+import akka.http.scaladsl.model.{ HttpRequest, HttpResponse, Uri, FormData, HttpMethods }
 import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.Producer
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Source, Sink, Framing}
+import akka.stream.scaladsl.{ Source, Sink, Framing }
 import akka.util.ByteString
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
-import play.api.libs.json.{Json, JsResultException}
+import play.api.libs.json.{ Json, JsResultException }
 import org.slf4j.LoggerFactory
 import scala.collection.immutable._
 import scala.concurrent.Future
 
-class TwitterStream (topic: String, consumer: OAuth.Consumer, token: OAuth.Token) {
+class TwitterStream(topic: String, consumer: OAuth.Consumer, token: OAuth.Token) {
   implicit val system = ActorSystem()
   implicit val dispatcher = system.dispatcher
   implicit val materializer = ActorMaterializer()
@@ -50,7 +50,6 @@ class TwitterStream (topic: String, consumer: OAuth.Consumer, token: OAuth.Token
       .via(Framing.delimiter(ByteString("\r\n"), Int.MaxValue))
       .filter(_.nonEmpty)
       .map { _.utf8String }
-//      .take(10)
       .map { line =>
         try {
           val tweet = Json.parse(line).as[Tweet]

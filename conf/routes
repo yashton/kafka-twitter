@@ -1,8 +1,0 @@
-GET     /                           controllers.HomeController.index
-
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-
-GET	/tweets/avg	controllers.HomeController.avgWords
-GET /tweets/avg/:count controllers.HomeController.avgWordsThreshold(count: Int)
-
-GET	/tweets/:user/avg	controllers.HomeController.avgWordsForUser(user: String)

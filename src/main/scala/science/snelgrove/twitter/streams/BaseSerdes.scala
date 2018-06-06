@@ -1,6 +1,6 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 
-import org.apache.kafka.common.serialization.{Deserializer, Serde, Serializer}
+import org.apache.kafka.common.serialization.{ Deserializer, Serde, Serializer }
 
 abstract class BaseSerde[T] extends Serde[T] {
   override def configure(configs: java.util.Map[String, _], isKey: Boolean): Unit = {}

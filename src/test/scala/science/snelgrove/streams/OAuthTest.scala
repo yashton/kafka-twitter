@@ -1,4 +1,4 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 
 import akka.http.scaladsl.model._
 import com.typesafe.config._

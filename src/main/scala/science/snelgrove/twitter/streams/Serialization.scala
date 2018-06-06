@@ -1,4 +1,4 @@
-package science.snelgrove
+package science.snelgrove.twitter.streams
 
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -9,8 +9,7 @@ object Serialization {
 
   val coordReads: Reads[Coordinates] = (
     (JsPath \ "coordinates" \ 0).read[Double] and
-      (JsPath \ "coordinates" \ 1).read[Double]
-  )(Coordinates.apply _)
+    (JsPath \ "coordinates" \ 1).read[Double])(Coordinates.apply _)
 
   val coordWrites: Writes[Coordinates] = new Writes[Coordinates] {
     def writes(c: Coordinates): JsValue = {
